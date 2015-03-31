@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -47,13 +47,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="GetTestcasesTests.cs" />
+    <Compile Include="MSTestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataDrivenTest\DataDrivenTest.csproj">
+    <ProjectReference Include="..\..\DataDrivenTest\TinyDigit.DataTest.csproj">
       <Project>{ff5d336e-4e92-4dd1-9e3a-80d59d82fd22}</Project>
-      <Name>DataDrivenTest</Name>
+      <Name>TinyDigit.DataTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
