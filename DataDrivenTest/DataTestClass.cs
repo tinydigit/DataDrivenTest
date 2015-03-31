@@ -148,27 +148,6 @@ namespace TinyDigit.DataTest
             {
                 yield return testcase;
             }
-
-            //objects
-            foreach(Testcase testcase in ProcessType(thisType))
-            {
-                yield return testcase;
-            }
-        }
-
-        private IEnumerable<Testcase> ProcessType(Type type)
-        {
-            IEnumerable<TestDataAttribute> attributes = type.GetCustomAttributes<TestDataAttribute>();
-            int index = 0;
-            foreach(TestDataAttribute testdata in attributes)
-            {
-                if (testdata.InlineDataSpecified)
-                {
-                    var testcase = new Testcase { Input = (I) testdata.Input, ExpectedValue = (E) testdata.ExpectedValue, Name = testdata.Name };
-                    testcase.ConfigureName(type.Name, index++);
-                    yield return testcase;
-                }
-            }
         }
 
         private IEnumerable<Testcase> ProcessMembers(IEnumerable<MemberInfo> members)

@@ -1,7 +1,7 @@
 ﻿// Copyright TinyDigit 2015
 // -- Pinky --/
 
-namespace TinyDigit.DataTest.Tests4MSTestDataTest
+namespace TinyDigit.DataTest.UnitTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;

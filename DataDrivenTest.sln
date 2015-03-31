@@ -5,11 +5,9 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyDigit.DataTest", "DataDrivenTest\TinyDigit.DataTest.csproj", "{FF5D336E-4E92-4DD1-9E3A-80D59D82FD22}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE32CEA3-9EBC-4E06-A26F-A356BBB69121}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3C6D1577-F8E9-498B-B72F-086892EB4A46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTestDataTests", "Tests\Tests4DataDrivenTest\MSTestDataTests.csproj", "{99D685AA-0158-4B01-BE78-989F5F6755E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTestDataTests", "Tests\MSTestDataTests\MSTestDataTests.csproj", "{99D685AA-0158-4B01-BE78-989F5F6755E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
