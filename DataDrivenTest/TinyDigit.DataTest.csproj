@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTestClass.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MSTestDataTest.cs">
       <SubType>Code</SubType>
     </Compile>

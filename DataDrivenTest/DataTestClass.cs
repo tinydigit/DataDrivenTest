@@ -43,12 +43,6 @@ namespace TinyDigit.DataTest
             public Testcase()
             { }
 
-            public Testcase(I input, E expectedValue)
-            {
-                this.Input = input;
-                this.ExpectedValue = expectedValue;
-            }
-
             public virtual String Name { get; set; }
             public virtual I Input { get; set; }
             public virtual E ExpectedValue { get; set; }
@@ -72,14 +66,6 @@ namespace TinyDigit.DataTest
             {
                 ConfigureName(nameInAttribute, memberName);
                 this.Name = string.Format("{0}_{1}", this.Name, index);
-            }
-
-            internal void ConfigureName(string typeName, int index)
-            {
-                if (string.IsNullOrEmpty(this.Name))
-                {
-                    this.Name = string.Format("{0}_{1}", typeName, index);
-                }
             }
         }
 
@@ -224,13 +210,18 @@ namespace TinyDigit.DataTest
             }
             else if (shortformTestcase != null)
             {
-                yield return new Testcase(shortformTestcase.Item1, shortformTestcase.Item2);
+                var testcase = new Testcase { Input = shortformTestcase.Item1, ExpectedValue = shortformTestcase.Item2 };
+                testcase.ConfigureName(attribute.Name, member.Name);
+                yield return testcase;
             }
             else if (multipleShortformTestcase != null)
             {
-                foreach(Tuple<I, E> shortForm in multipleShortformTestcase)
+                int index = 1;
+                foreach(Tuple<I, E> shortform in multipleShortformTestcase)
                 {
-                    yield return new Testcase(shortForm.Item1, shortForm.Item2);
+                    var testcase = new Testcase { Input = shortform.Item1, ExpectedValue = shortform.Item2 };
+                    testcase.ConfigureName(attribute.Name, member.Name, index++);
+                    yield return testcase;
                 }
             }
             else

@@ -74,7 +74,7 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcaseFieldArrayTest()
+        public void FieldArrayTest()
         {
             TestcasesBase tests = new FieldWithArrayTest();
             IEnumerable<TestcasesBase.Testcase> testcases = tests.GetTestcasesToTest();
@@ -96,7 +96,7 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcaseMethodIEnumerableTest()
+        public void MethodIEnumerableTest()
         {
             TestcasesBase tests = new MethodWithIEnumerableTest();
             IEnumerable<TestcasesBase.Testcase> testcases = tests.GetTestcasesToTest();
@@ -117,7 +117,7 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcaseMethodArrayTest()
+        public void MethodArrayTest()
         {
             TestcasesBase tests = new MethodWithArrayTest();
             IEnumerable<TestcasesBase.Testcase> testcases = tests.GetTestcasesToTest();
@@ -142,7 +142,7 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcasePropertyTest()
+        public void PropertyTest()
         {
             TestcasesBase test = new SinglePropertyTest();
             IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
@@ -159,9 +159,9 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcaseStaticMethodTest()
+        public void StaticMethodTest()
         {
-            TestcasesBase test = new StaticMethodTest();
+            TestcasesBase test = new StaticMethodTestClass();
             IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
             SingleTestAssertion("GetTestcase", testcases);
 
@@ -169,7 +169,7 @@ namespace TinyDigit.DataTest.UnitTest
             test.ExecuteTests();
         }
 
-        private class StaticMethodTest : TestcasesBase
+        private class StaticMethodTestClass : TestcasesBase
         {
             [TestData]
             public static Testcase GetTestcase()
@@ -179,7 +179,7 @@ namespace TinyDigit.DataTest.UnitTest
         }
 
         [TestMethod]
-        public void GetTestcaseBadTypeTest()
+        public void BadTypeTest()
         {
             TestcasesBase test = new BadTestcaseTypeTest();
             try
@@ -203,6 +203,41 @@ namespace TinyDigit.DataTest.UnitTest
 #pragma warning disable 0414
             private int Badtestcase = 1;
 #pragma warning restore 0414
+        }
+
+        [TestMethod]
+        public void SingleShortFormTest()
+        {
+            TestcasesBase test = new SingleShortFormTestClass();
+            IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
+            SingleTestAssertion("singleTest", testcases);
+            test.ExecuteTests();
+        }
+
+        private class SingleShortFormTestClass : TestcasesBase
+        {
+            [TestData]
+            Tuple<string, int> singleTest = new Tuple<string, int>("1", 1 );
+        }
+
+        [TestMethod]
+        public void MultipleShortFormTest()
+        {
+            TestcasesBase test = new MultipeShortFormTestClass();
+            IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
+            IEnumerableTestAssertion("multipleTests_", testcases);
+            test.ExecuteTests();
+        }
+
+        private class MultipeShortFormTestClass : TestcasesBase
+        {
+            [TestData]
+            Tuple<string, int>[] multipleTests = new Tuple<string, int>[]
+            {
+                new Tuple<string, int>("1", 1),
+                new Tuple<string, int>("2", 2),
+                new Tuple<string, int>("3", 3),
+            };
         }
 
         private static void SingleTestAssertion(string expectedName, IEnumerable<TestcasesBase.Testcase> testcases)

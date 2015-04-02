@@ -14,24 +14,11 @@ namespace TinyDigit.DataTest
 
         public TestDataAttribute() { }
 
-        public TestDataAttribute(object input, object expectedValue)
-        {
-            this.input = input;
-            this.expectedValue = expectedValue;
-            this.dataSpecified = true;
-        }
-
         public TestDataAttribute(string name)
         {
             this.Name = name;
         }
 
         public string Name { get; set; }
-
-        internal bool InlineDataSpecified { get { return this.dataSpecified; } }
-
-        public virtual object Input { get { return this.input; } }
-
-        public virtual object ExpectedValue { get { return this.expectedValue; } }
     }
 }
