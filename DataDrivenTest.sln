@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyDigit.DataTest", "DataD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3C6D1577-F8E9-498B-B72F-086892EB4A46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSTestDataTests", "Tests\MSTestDataTests\MSTestDataTests.csproj", "{99D685AA-0158-4B01-BE78-989F5F6755E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyDigit.DataTest.MSTest.Tests", "Tests\MSTestDataTests\TinyDigit.DataTest.MSTest.Tests.csproj", "{99D685AA-0158-4B01-BE78-989F5F6755E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B303594B-B9FE-4767-8DB9-0567C29294BC}"
 	ProjectSection(SolutionItems) = preProject
