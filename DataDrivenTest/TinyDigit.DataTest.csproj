@@ -57,6 +57,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="TinyDigit.DataTest.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="TinyDigit.DataTest.TestKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

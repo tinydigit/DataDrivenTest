@@ -10,44 +10,52 @@ I spent a little bit of time playing with some of the data-driven test framework
 Simply put, I wanted to new up some objects as my input data and/or my expected values. Here's a simple example of a data-driven test using this library:
 
 
-'''csharp
+```c#
+private class TokenizationTests : MSTestDataTest<string, IEnumerable<Token>>
+{
+    [TestData]
+    private Testcase[] singleTokenTests = new Testcase[]
+    {
+        new Testcase 
+        { 
+            Input = "1", 
+            ExpectedValue = new Token[]
+            {
+                new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 0, Length = 1 }
+            }
+        },
+        new Testcase 
+        { 
+            Input = "     ", 
+            ExpectedValue = new Token[]
+            {
+                new WhitespaceToken { Value = "     ", StartIndex = 0, Length = 5 }
+            }
+        },
+    };
 
-private class TokenizationTests : MSTestDataTest<string, ienumerable<Token>>
-{
-[TestData]
-private Testcase[] singleTokenTests = new Testcase[]
-{
-new Testcase { Input = "1", ExpectedValue = new Token[]
-{
-new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 0, Length = 1 }
-}
-},
-new Testcase { Input = "     ", ExpectedValue = new Token[]
-{
-new WhitespaceToken { Value = "     ", StartIndex = 0, Length = 5 }
-}
-},
-};
+    [TestData]
+    private Testcase[] constantExpressionTest = new Testcase[]
+    {
+        new Testcase 
+        { 
+            Input = "1+1", 
+            ExpectedValue = new Token[]
+            {
+                new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 0, Length = 1 },
+                new BinaryOperatorToken { Operator = BinaryOperator.Plus, StartIndex = 1, Length = 1 },
+                new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 2, Length = 1 }
+            }
+        },
+    };
 
-[TestData]
-private Testcase[] constantExpressionTest = new Testcase[]
-{
-new Testcase { Input = "1+1", ExpectedValue = new Token[]
-{
-new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 0, Length = 1 },
-new BinaryOperatorToken { Operator = BinaryOperator.Plus, StartIndex = 1, Length = 1 },
-new ConstantToken { Value = 1, ValueKind = ValueKind.Number, StartIndex = 2, Length = 1 }
+    protected override IEnumerable<Token> ExecuteOperation(string input)
+    {
+        ExpressionParser parser = new ExpressionParser();
+        return parser.Tokenize(input);
+    }
 }
-},
-};
-
-protected override IEnumerable<Token> ExecuteOperation(string input)
-{
-ExpressionParser parser = new ExpressionParser();
-return parser.Tokenize(input);
-}
-}
-'''
+```
 
 # Implementation Steps
 Follow these general steps to implement a data-driven test.
@@ -64,8 +72,7 @@ Follow these general steps to implement a data-driven test.
 
 *Note - in some instances, the Attributes used by the test runner framework to identify a test class and test methods are not always being discovered correctly from the base class by the test runner. Therefore, you may need to add them to your test class that inherits from the data-driven base class. To add the test method attribute, override the ExecuteTests method. For example:
 
-    '''csharp
-
+```c#
     [TestClass]
     public class MyTest : MSTestDataTest<string, int>
     {
@@ -75,8 +82,7 @@ Follow these general steps to implement a data-driven test.
             base.ExecuteTests();
         }
     }
-
-    '''
+```
 
 # Test Driver Support
 The intention of this library is to support the different test drivers used by .Net developers. The following test runners are supported:

@@ -11,6 +11,6 @@
     <description>$description$</description>
     <releaseNotes>Initial version without documentation.</releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags></tags>
+    <tags>.net data-driven testing</tags>
   </metadata>
 </package>
