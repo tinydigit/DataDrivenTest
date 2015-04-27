@@ -100,9 +100,12 @@ coming soon...
 coming soon...
 
 # Future Investments
-
 * Deeper Visual Studio integration, namely, showing each Testcase as a separate line item in the Test explorer.
 * Catch assertion exceptions and continue running, capturing all of the results in 1 "report"
+
+# Versions
+* 0.1.427.0 - Added support for multiple failing testcases to run without quiting after the first failure.
+* 0.1.402.0 - Initial version signed
 
 # Links
 * [Nuget package](http://www.nuget.org/packages/TinyDigit.DataTest)
