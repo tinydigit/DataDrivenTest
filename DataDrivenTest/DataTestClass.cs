@@ -27,9 +27,9 @@ namespace TinyDigit.DataTest
     public abstract class DataTestClass<I, E> : DataTestClass
     {
         private static object[] PARAMETERS = new object[0];
-        private readonly AssertionHandler asserter;
+        protected readonly AssertionHandler<E> assertionHandler;
 
-        public delegate void AssertionHandler(E expected, E actual, string errorMessage);
+        public event EventHandler<EventArgs> DataTestClassCompleted;
 
         // Testcase handles input value of type I
         // and expected output value of type E
@@ -47,35 +47,43 @@ namespace TinyDigit.DataTest
             public virtual I Input { get; set; }
             public virtual E ExpectedValue { get; set; }
 
-            internal void ConfigureName(string nameInAttribute, string memberName)
+            private static string PickName(string nameInAttribute, string memberName)
             {
-                if (string.IsNullOrEmpty(this.Name))
+                if (!string.IsNullOrEmpty(nameInAttribute))
                 {
-                    if (!string.IsNullOrEmpty(nameInAttribute))
-                    {
-                        this.Name = nameInAttribute;
-                    }
-                    else
-                    {
-                        this.Name = memberName;
-                    }
+                    return nameInAttribute;
+                }
+                else
+                {
+                    return memberName;
                 }
             }
 
-            internal void ConfigureName(string nameInAttribute, string memberName, int index)
+            internal void SetNameIfNull(string nameInAttribute, string memberName)
             {
-                ConfigureName(nameInAttribute, memberName);
-                this.Name = string.Format("{0}_{1}", this.Name, index);
+                if (string.IsNullOrEmpty(this.Name))
+                {
+                    this.Name = PickName(nameInAttribute, memberName);
+                }
+            }
+
+            internal void SetNameIfNull(string nameInAttribute, string memberName, int index)
+            {
+                if (string.IsNullOrEmpty(this.Name))
+                {
+                    string prefixName = PickName(nameInAttribute, memberName);
+                    this.Name = string.Format("{0}_{1}", prefixName, index);
+                }
             }
         }
 
-        public DataTestClass(AssertionHandler asserter)
+        public DataTestClass(AssertionHandler<E> asserter)
         {
             if (asserter == null)
             {
                 throw new ArgumentNullException("asserter");
             }
-            this.asserter = asserter;
+            this.assertionHandler = asserter;
         }
 
         protected abstract E ExecuteOperation(I input);
@@ -83,13 +91,13 @@ namespace TinyDigit.DataTest
         // performs an assert using the comparer passed in during construction
         protected virtual void ExecuteAssertion(Testcase testcase, E actualValue)
         {
-            string errorMessage = String.Format("Test failure '{0}' input: '{1}' expected:'{2}' actual:'{3}", 
+            string errorMessage = String.Format("TESTCASE failed:'{0}' input:<{1}> expected:<{2}> actual:<{3}>.", 
                 testcase.Name,
                 testcase.Input.ToString(),
                 testcase.ExpectedValue,
                 actualValue);
 
-            this.asserter(testcase.ExpectedValue, actualValue, errorMessage);
+            this.assertionHandler.TestcaseAssert(testcase.ExpectedValue, actualValue, errorMessage);
         }
 
         /* Basic algorithm description
@@ -110,6 +118,10 @@ namespace TinyDigit.DataTest
             {
                 E actualValue = ExecuteOperation(testcase.Input);
                 ExecuteAssertion(testcase, actualValue);
+            }
+            if (this.DataTestClassCompleted != null)
+            {
+                this.DataTestClassCompleted(this, new EventArgs());
             }
         }
 
@@ -196,7 +208,7 @@ namespace TinyDigit.DataTest
             IEnumerable<Tuple<I, E>> multipleShortformTestcase = value as IEnumerable<Tuple<I, E>>;
             if (singleTestcase != null)
             {
-                singleTestcase.ConfigureName(attribute.Name, member.Name);
+                singleTestcase.SetNameIfNull(attribute.Name, member.Name);
                 yield return singleTestcase;
             }
             else if (multipleTestcases != null)
@@ -204,14 +216,14 @@ namespace TinyDigit.DataTest
                 int index = 1;
                 foreach (Testcase testcase in multipleTestcases)
                 {
-                    testcase.ConfigureName(attribute.Name, member.Name, index++);
+                    testcase.SetNameIfNull(attribute.Name, member.Name, index++);
                     yield return testcase;
                 }
             }
             else if (shortformTestcase != null)
             {
                 var testcase = new Testcase { Input = shortformTestcase.Item1, ExpectedValue = shortformTestcase.Item2 };
-                testcase.ConfigureName(attribute.Name, member.Name);
+                testcase.SetNameIfNull(attribute.Name, member.Name);
                 yield return testcase;
             }
             else if (multipleShortformTestcase != null)
@@ -220,7 +232,7 @@ namespace TinyDigit.DataTest
                 foreach(Tuple<I, E> shortform in multipleShortformTestcase)
                 {
                     var testcase = new Testcase { Input = shortform.Item1, ExpectedValue = shortform.Item2 };
-                    testcase.ConfigureName(attribute.Name, member.Name, index++);
+                    testcase.SetNameIfNull(attribute.Name, member.Name, index++);
                     yield return testcase;
                 }
             }

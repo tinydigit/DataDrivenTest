@@ -240,17 +240,83 @@ namespace TinyDigit.DataTest.MSTest.Tests
             };
         }
 
-        private static void SingleTestAssertion(string expectedName, IEnumerable<TestcasesBase.Testcase> testcases)
+        [TestMethod]
+        public void SingleFailureTest()
+        {
+            TestcasesBase test = new SingleFailureTestClass();
+            IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
+            ParameterizedSingleTestAssertion("SingleTest", testcases, "2", 1);
+            try
+            {
+                test.ExecuteTests();
+                Assert.Fail();
+            }
+            catch(UnitTestAssertException exception)
+            {
+                Assert.AreEqual(exception.Message, "Assert.Fail failed. Assert.AreEqual failed. Expected:<1>. Actual:<2>. TESTCASE failed:'SingleTest' input:<2> expected:<1> actual:<2>.\r\n");
+            }
+        }
+
+        private class SingleFailureTestClass : TestcasesBase
+        {
+            [TestData(Name = "SingleTest")]
+            Testcase testcase = new Testcase() { Input = "2", ExpectedValue = 1 };
+        }
+
+        [TestMethod]
+        public void MultipleFailureTest()
+        {
+            TestcasesBase test = new MultipleFailureTestClass();
+            IEnumerable<TestcasesBase.Testcase> testcases = test.GetTestcasesToTest();
+            ParameterizedIEnumerableTestAssertion("multiple-tests_", testcases, "2", 1);
+            try
+            {
+                test.ExecuteTests();
+                Assert.Fail();
+            }
+            catch (UnitTestAssertException exception)
+            {
+                Assert.AreEqual(exception.Message, "Assert.Fail failed. Assert.AreEqual failed. Expected:<1>. Actual:<2>. TESTCASE failed:'multiple-tests_1' input:<2> expected:<1> actual:<2>.\r\nAssert.AreEqual failed. Expected:<1>. Actual:<2>. TESTCASE failed:'multiple-tests_2' input:<2> expected:<1> actual:<2>.\r\n");
+            }
+        }
+
+        private class MultipleFailureTestClass : TestcasesBase
+        {
+            [TestData(Name = "multiple-tests")]
+            Testcase[] testcase = new Testcase[] {
+                new Testcase() { Input = "2", ExpectedValue = 1 },
+                new Testcase() { Input = "2", ExpectedValue = 1 },
+            };
+        }
+
+        private static void ParameterizedSingleTestAssertion(string expectedName, IEnumerable<TestcasesBase.Testcase> testcases, string expectedInput, int expectedValue)
         {
             int testcaseCount = 0;
             foreach (TestcasesBase.Testcase testcase in testcases)
             {
                 Assert.AreEqual(expectedName, testcase.Name);
-                Assert.AreEqual("1", testcase.Input);
-                Assert.AreEqual(1, testcase.ExpectedValue);
+                Assert.AreEqual(expectedInput, testcase.Input);
+                Assert.AreEqual(expectedValue, testcase.ExpectedValue);
                 testcaseCount++;
             }
             Assert.AreEqual(1, testcaseCount, "expected a single testcase");
+        }
+
+        private static void SingleTestAssertion(string expectedName, IEnumerable<TestcasesBase.Testcase> testcases)
+        {
+            ParameterizedSingleTestAssertion(expectedName, testcases, "1", 1);
+        }
+        private void ParameterizedIEnumerableTestAssertion(string nameBase, IEnumerable<TestcasesBase.Testcase> testcases, string expectedInput, int expectedValue)
+        {
+            int index = 0;
+            foreach (TestcasesBase.Testcase testcase in testcases)
+            {
+                string indexString = (index + 1).ToString();
+                Assert.AreEqual(nameBase + indexString, testcase.Name);
+                Assert.AreEqual(expectedInput, testcase.Input);
+                Assert.AreEqual(expectedValue, testcase.ExpectedValue);
+                index++;
+            }
         }
 
         private void IEnumerableTestAssertion(string nameBase, IEnumerable<TestcasesBase.Testcase> testcases)

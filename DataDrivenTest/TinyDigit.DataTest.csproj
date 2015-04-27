@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,8 +48,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultipleAssertionHandler.cs" />
     <Compile Include="DataTestClass.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="AssertionHandler.cs" />
     <Compile Include="MSTestDataTest.cs">
       <SubType>Code</SubType>
     </Compile>
